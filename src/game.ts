@@ -14,13 +14,15 @@ export class Game {
     cassidy: Cassidy
     zenyatta: Zenyatta
 
-    constructor() {
+    constructor(pixi : PIXI.Application) {
 
-        // Create PIXI canvas
-        this.pixi = new PIXI.Application({ width: 1024, height: 384 })
-        document.body.appendChild(this.pixi.view)
+        this.pixi = pixi
 
+        //
+        // STAP 1 is verhuisd naar startmenu.ts
+        //
 
+    
         // Preload all the textures
         this.loader = new PIXI.Loader()
         this.loader.add('backgroundImage', backgroundImage)
@@ -32,6 +34,10 @@ export class Game {
     loadCompleted() {
         // After loading, create sprites
         let background = new PIXI.Sprite(this.loader.resources["backgroundImage"].texture!)
+        background.scale.set(
+            window.innerWidth / background.getBounds().width,
+            window.innerHeight / background.getBounds().height
+        )
         this.pixi.stage.addChild(background)
 
         this.cassidy = new Cassidy(this.loader.resources["cassidyImage"].texture!)
@@ -47,5 +53,3 @@ export class Game {
         this.cassidy.update(delta)
     }
 }
-
-new Game()

@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"a5k68":[function(require,module,exports) {
+})({"5BOYT":[function(require,module,exports) {
 "use strict";
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "a7523702901f85c2";
+module.bundle.HMR_BUNDLE_ID = "638f34211b34d9e1";
 function _toConsumableArray(arr) {
     return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
 }
@@ -525,50 +525,39 @@ function hmrAcceptRun(bundle, id) {
     acceptedAssets[id] = true;
 }
 
-},{}],"edeGs":[function(require,module,exports) {
+},{}],"cS4Fe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Game", ()=>Game
+parcelHelpers.export(exports, "Startmenu", ()=>Startmenu
 );
 var _pixiJs = require("pixi.js");
-var _cassidyPng = require("./images/cassidy.png");
-var _cassidyPngDefault = parcelHelpers.interopDefault(_cassidyPng);
-var _backgroundPng = require("./images/background.png");
-var _backgroundPngDefault = parcelHelpers.interopDefault(_backgroundPng);
-var _zenyattaPng = require("./images/zenyatta.png");
-var _zenyattaPngDefault = parcelHelpers.interopDefault(_zenyattaPng);
-var _cassidy = require("./cassidy");
-var _zenyatta = require("./zenyatta");
-class Game {
-    constructor(pixi){
-        this.pixi = pixi;
+var _game = require("./game");
+var _button = require("./button");
+class Startmenu {
+    constructor(){
+        console.log("Startmenu created!");
         //
-        // STAP 1 is verhuisd naar startmenu.ts
+        // STAP 1 - maak een pixi canvas
         //
-        // Preload all the textures
-        this.loader = new _pixiJs.Loader();
-        this.loader.add('backgroundImage', _backgroundPngDefault.default).add('cassidyImage', _cassidyPngDefault.default).add('zenyattaImage', _zenyattaPngDefault.default);
-        this.loader.load(()=>this.loadCompleted()
+        this.pixi = new _pixiJs.Application({
+            width: window.innerWidth,
+            height: window.innerHeight,
+            forceCanvas: true
+        });
+        document.body.appendChild(this.pixi.view);
+        this.button = new _button.Button(this.pixi.screen.width / 2, this.pixi.screen.height / 2);
+        this.pixi.stage.addChild(this.button);
+        this.button.on("pointerdown", ()=>this.onClick()
         );
     }
-    loadCompleted() {
-        // After loading, create sprites
-        let background = new _pixiJs.Sprite(this.loader.resources["backgroundImage"].texture);
-        background.scale.set(window.innerWidth / background.getBounds().width, window.innerHeight / background.getBounds().height);
-        this.pixi.stage.addChild(background);
-        this.cassidy = new _cassidy.Cassidy(this.loader.resources["cassidyImage"].texture);
-        this.pixi.stage.addChild(this.cassidy);
-        this.zenyatta = new _zenyatta.Zenyatta(this.loader.resources["zenyattaImage"].texture);
-        this.pixi.stage.addChild(this.zenyatta);
-        this.pixi.ticker.add((delta)=>this.update(delta)
-        );
-    }
-    update(delta) {
-        this.cassidy.update(delta);
+    onClick() {
+        this.button.destroy();
+        new _game.Game(this.pixi);
     }
 }
+new Startmenu();
 
-},{"pixi.js":"dsYej","./images/cassidy.png":"JxN10","./images/background.png":"fwQMR","./images/zenyatta.png":"eEeWm","./cassidy":"2aFYG","./zenyatta":"hHKQM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./game":"edeGs","./button":"hHDeU","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37083,8 +37072,51 @@ function __extends(d, b) {
     return AnimatedSprite1;
 }(_sprite.Sprite);
 
-},{"@pixi/core":"7PEF8","@pixi/sprite":"9mbxh","@pixi/ticker":"8ekG7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"JxN10":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "cassidy.c60fd0ae.png" + "?" + Date.now();
+},{"@pixi/core":"7PEF8","@pixi/sprite":"9mbxh","@pixi/ticker":"8ekG7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"edeGs":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Game", ()=>Game
+);
+var _pixiJs = require("pixi.js");
+var _cassidyPng = require("./images/cassidy.png");
+var _cassidyPngDefault = parcelHelpers.interopDefault(_cassidyPng);
+var _backgroundPng = require("./images/background.png");
+var _backgroundPngDefault = parcelHelpers.interopDefault(_backgroundPng);
+var _zenyattaPng = require("./images/zenyatta.png");
+var _zenyattaPngDefault = parcelHelpers.interopDefault(_zenyattaPng);
+var _cassidy = require("./cassidy");
+var _zenyatta = require("./zenyatta");
+class Game {
+    constructor(pixi){
+        this.pixi = pixi;
+        //
+        // STAP 1 is verhuisd naar startmenu.ts
+        //
+        // Preload all the textures
+        this.loader = new _pixiJs.Loader();
+        this.loader.add('backgroundImage', _backgroundPngDefault.default).add('cassidyImage', _cassidyPngDefault.default).add('zenyattaImage', _zenyattaPngDefault.default);
+        this.loader.load(()=>this.loadCompleted()
+        );
+    }
+    loadCompleted() {
+        // After loading, create sprites
+        let background = new _pixiJs.Sprite(this.loader.resources["backgroundImage"].texture);
+        background.scale.set(window.innerWidth / background.getBounds().width, window.innerHeight / background.getBounds().height);
+        this.pixi.stage.addChild(background);
+        this.cassidy = new _cassidy.Cassidy(this.loader.resources["cassidyImage"].texture);
+        this.pixi.stage.addChild(this.cassidy);
+        this.zenyatta = new _zenyatta.Zenyatta(this.loader.resources["zenyattaImage"].texture);
+        this.pixi.stage.addChild(this.zenyatta);
+        this.pixi.ticker.add((delta)=>this.update(delta)
+        );
+    }
+    update(delta) {
+        this.cassidy.update(delta);
+    }
+}
+
+},{"pixi.js":"dsYej","./images/cassidy.png":"5A1ee","./images/background.png":"aHAnT","./images/zenyatta.png":"2JSGJ","./cassidy":"2aFYG","./zenyatta":"hHKQM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5A1ee":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "cassidy.c60fd0ae.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
 "use strict";
@@ -37120,11 +37152,11 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}],"fwQMR":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "background.84053517.png" + "?" + Date.now();
+},{}],"aHAnT":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "background.84053517.png" + "?" + Date.now();
 
-},{"./helpers/bundle-url":"lgJ39"}],"eEeWm":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "zenyatta.b88b58cb.png" + "?" + Date.now();
+},{"./helpers/bundle-url":"lgJ39"}],"2JSGJ":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "zenyatta.b88b58cb.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"2aFYG":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -37189,6 +37221,33 @@ class Zenyatta extends _pixiJs.Sprite {
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["a5k68","edeGs"], "edeGs", "parcelRequire94c2")
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hHDeU":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Button", ()=>Button
+);
+var _pixiJs = require("pixi.js");
+class Button extends _pixiJs.Graphics {
+    constructor(x, y){
+        super();
+        this.beginFill(0x00FF00);
+        this.drawRoundedRect(0, 0, 150, 80, 15);
+        this.endFill();
+        this.x = x - this.getBounds().width / 2;
+        this.y = y - this.getBounds().height / 2;
+        const startText = new _pixiJs.Text("Start game", {
+            "fontFamily": "\"Comic Sans MS\", cursive, sans-serif",
+            "fontSize": 25
+        });
+        startText.x = this.getBounds().width / 2;
+        startText.y = this.getBounds().height / 2;
+        startText.anchor.set(0.5);
+        this.addChild(startText);
+        this.buttonMode = true;
+        this.interactive = true;
+    }
+}
 
-//# sourceMappingURL=index.901f85c2.js.map
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["5BOYT","cS4Fe"], "cS4Fe", "parcelRequire94c2")
+
+//# sourceMappingURL=index.1b34d9e1.js.map
