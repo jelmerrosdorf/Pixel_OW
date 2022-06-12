@@ -4,7 +4,7 @@ export class Button extends PIXI.Graphics {
     constructor(x: number, y: number) {
         super()
         
-        this.beginFill(0x00FF00)
+        this.beginFill(0xFF5733)
         this.drawRoundedRect(0, 0, 150, 80, 15)
         this.endFill()
 

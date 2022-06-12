@@ -8,8 +8,8 @@ export class Cassidy extends PIXI.Sprite {
         super(texture)
 
         this.scale.set(-1, 1)
-        this.x = 200;
-        this.y = 200;
+        this.x = 300;
+        this.y = 500;
         this.width = 150;
         this.height = 150;
 
@@ -19,6 +19,10 @@ export class Cassidy extends PIXI.Sprite {
 
     update(delta: number) {
         this.x += this.xspeed * delta
+
+        if(this.x <= 150) {
+            this.xspeed = 0
+        }
     }
 
     onKeyDown(e: KeyboardEvent): void {

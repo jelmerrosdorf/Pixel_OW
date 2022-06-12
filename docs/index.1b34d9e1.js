@@ -37169,8 +37169,8 @@ class Cassidy extends _pixiJs.Sprite {
     constructor(texture){
         super(texture);
         this.scale.set(-1, 1);
-        this.x = 200;
-        this.y = 200;
+        this.x = 300;
+        this.y = 500;
         this.width = 150;
         this.height = 150;
         window.addEventListener("keydown", (e)=>this.onKeyDown(e)
@@ -37180,6 +37180,7 @@ class Cassidy extends _pixiJs.Sprite {
     }
     update(delta) {
         this.x += this.xspeed * delta;
+        if (this.x <= 150) this.xspeed = 0;
     }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
@@ -37214,8 +37215,8 @@ var _pixiJs = require("pixi.js");
 class Zenyatta extends _pixiJs.Sprite {
     constructor(texture){
         super(texture);
-        this.x = 850;
-        this.y = 200;
+        this.x = 1200;
+        this.y = 500;
         this.width = 150;
         this.height = 150;
     }
@@ -37230,7 +37231,7 @@ var _pixiJs = require("pixi.js");
 class Button extends _pixiJs.Graphics {
     constructor(x, y){
         super();
-        this.beginFill(0x00FF00);
+        this.beginFill(0xFF5733);
         this.drawRoundedRect(0, 0, 150, 80, 15);
         this.endFill();
         this.x = x - this.getBounds().width / 2;
