@@ -37080,16 +37080,15 @@ parcelHelpers.export(exports, "Game", ()=>Game
 var _pixiJs = require("pixi.js");
 var _cassidyPng = require("./images/cassidy.png");
 var _cassidyPngDefault = parcelHelpers.interopDefault(_cassidyPng);
-var _backgroundPng = require("./images/background.png");
-var _backgroundPngDefault = parcelHelpers.interopDefault(_backgroundPng);
 var _zenyattaPng = require("./images/zenyatta.png");
 var _zenyattaPngDefault = parcelHelpers.interopDefault(_zenyattaPng);
-var _bulletJpg = require("./images/bullet.jpg");
-var _bulletJpgDefault = parcelHelpers.interopDefault(_bulletJpg);
+var _bulletPng = require("./images/bullet.png");
+var _bulletPngDefault = parcelHelpers.interopDefault(_bulletPng);
 var _cassidy = require("./cassidy");
 var _zenyatta = require("./zenyatta");
 var _bullet = require("./bullet");
 class Game {
+    backgroundTextures = [];
     bullets = [];
     constructor(pixi){
         this.pixi = pixi;
@@ -37098,15 +37097,21 @@ class Game {
         //
         // Preload all the textures
         this.loader = new _pixiJs.Loader();
-        this.loader.add('backgroundImage', _backgroundPngDefault.default).add('cassidyImage', _cassidyPngDefault.default).add('zenyattaImage', _zenyattaPngDefault.default).add('bulletImage', _bulletJpgDefault.default);
+        this.loader.add('spritesheet', "spritesheet.json").add('cassidyImage', _cassidyPngDefault.default).add('zenyattaImage', _zenyattaPngDefault.default).add('bulletImage', _bulletPngDefault.default);
         this.loader.load(()=>this.loadCompleted()
         );
     }
     loadCompleted() {
         // After loading, create sprites
-        let background = new _pixiJs.Sprite(this.loader.resources["backgroundImage"].texture);
+        for(let i = 0; i < 8; i++){
+            const texture = _pixiJs.Texture.from(`frame_${i}_delay-0.1s.png`);
+            this.backgroundTextures.push(texture);
+        }
+        let background = new _pixiJs.AnimatedSprite(this.backgroundTextures);
         background.scale.set(window.innerWidth / background.getBounds().width, window.innerHeight / background.getBounds().height);
         this.pixi.stage.addChild(background);
+        background.animationSpeed = 0.15;
+        background.play();
         this.cassidy = new _cassidy.Cassidy(this.loader.resources["cassidyImage"].texture, this);
         this.pixi.stage.addChild(this.cassidy);
         this.zenyatta = new _zenyatta.Zenyatta(this.loader.resources["zenyattaImage"].texture);
@@ -37127,11 +37132,11 @@ class Game {
     removeBullet(bullet) {
         this.bullets = this.bullets.filter((b)=>b != bullet
         );
-        bullet.destroy;
+        bullet.destroy();
     }
 }
 
-},{"pixi.js":"dsYej","./images/cassidy.png":"5A1ee","./images/background.png":"aHAnT","./images/zenyatta.png":"2JSGJ","./cassidy":"2aFYG","./zenyatta":"hHKQM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./bullet":"bzwxK","./images/bullet.jpg":"60NHX"}],"5A1ee":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/cassidy.png":"5A1ee","./images/zenyatta.png":"2JSGJ","./cassidy":"2aFYG","./zenyatta":"hHKQM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./bullet":"bzwxK","./images/bullet.png":"3lWn3"}],"5A1ee":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "cassidy.c60fd0ae.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -37168,10 +37173,7 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}],"aHAnT":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "background.84053517.png" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"2JSGJ":[function(require,module,exports) {
+},{}],"2JSGJ":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "zenyatta.b88b58cb.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"2aFYG":[function(require,module,exports) {
@@ -37285,14 +37287,12 @@ class Bullet extends _pixiJs.Sprite {
     }
     update() {
         this.x += 3;
-    // if (this.x > 1400) {
-    //     this.game.removeBullet(this)
-    // }
+        if (this.x > 1400) this.game.removeBullet(this);
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"60NHX":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "bullet.355fd847.jpg" + "?" + Date.now();
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3lWn3":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "bullet.3dbbe9b9.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"hHDeU":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

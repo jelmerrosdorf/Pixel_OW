@@ -14,8 +14,8 @@ export class Bullet extends PIXI.Sprite {
 
     public update() {
         this.x += 3
-        // if (this.x > 1400) {
-        //     this.game.removeBullet(this)
-        // }
+        if (this.x > 1400) {
+            this.game.removeBullet(this)
+        }
     }
 }
