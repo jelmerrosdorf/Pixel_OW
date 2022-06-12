@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js'
 
 export class Zenyatta extends PIXI.Sprite {
 
-    xspeed: number = 0
+    private xspeed: number = 0
 
     constructor(texture: PIXI.Texture){
         super(texture)
@@ -16,7 +16,7 @@ export class Zenyatta extends PIXI.Sprite {
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
     }
 
-    update(delta: number) {
+    public update(delta: number) {
         this.x += this.xspeed * delta
 
         if(this.x >= 1400) {
@@ -24,9 +24,7 @@ export class Zenyatta extends PIXI.Sprite {
         }
     }
 
-
-
-    onKeyDown(e: KeyboardEvent): void {
+    private onKeyDown(e: KeyboardEvent): void {
         switch (e.key.toUpperCase()) {
             case "ARROWLEFT":
                 this.xspeed = -7
@@ -37,7 +35,7 @@ export class Zenyatta extends PIXI.Sprite {
         }
     }
 
-    onKeyUp(e: KeyboardEvent): void {
+    private onKeyUp(e: KeyboardEvent): void {
         switch (e.key.toUpperCase()) {
             case "ARROWLEFT":
             case "ARROWRIGHT":

@@ -1,12 +1,15 @@
 import * as PIXI from 'pixi.js'
+import { Game } from './game'
 
 export class Cassidy extends PIXI.Sprite {
 
-    xspeed: number = 0
+    private xspeed: number = 0
+    private game: Game
 
-    constructor(texture: PIXI.Texture) {
+    constructor(texture: PIXI.Texture, game: Game) {
         super(texture)
-
+        this.game = game
+        
         this.scale.set(-1, 1)
         this.x = 300;
         this.y = 500;
@@ -17,16 +20,23 @@ export class Cassidy extends PIXI.Sprite {
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
     }
 
-    update(delta: number) {
+    public update(delta: number) {
         this.x += this.xspeed * delta
 
         if (this.x <= 150) {
             this.x = 150
-        } 
+        }
     }
 
-    onKeyDown(e: KeyboardEvent): void {
+    private shoot() {
+        this.game.spawnBullet(this.x + 150)
+    }
+
+    private onKeyDown(e: KeyboardEvent): void {
         switch (e.key.toUpperCase()) {
+            case "F":
+                this.shoot()
+                break
             case "A":
                 this.xspeed = -7
                 break
@@ -36,8 +46,10 @@ export class Cassidy extends PIXI.Sprite {
         }
     }
 
-    onKeyUp(e: KeyboardEvent): void {
+    private onKeyUp(e: KeyboardEvent): void {
         switch (e.key.toUpperCase()) {
+            case "F":
+                break
             case "A":
             case "D":
                 this.xspeed = 0

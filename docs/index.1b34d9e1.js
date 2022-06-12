@@ -37084,9 +37084,13 @@ var _backgroundPng = require("./images/background.png");
 var _backgroundPngDefault = parcelHelpers.interopDefault(_backgroundPng);
 var _zenyattaPng = require("./images/zenyatta.png");
 var _zenyattaPngDefault = parcelHelpers.interopDefault(_zenyattaPng);
+var _bulletJpg = require("./images/bullet.jpg");
+var _bulletJpgDefault = parcelHelpers.interopDefault(_bulletJpg);
 var _cassidy = require("./cassidy");
 var _zenyatta = require("./zenyatta");
+var _bullet = require("./bullet");
 class Game {
+    bullets = [];
     constructor(pixi){
         this.pixi = pixi;
         //
@@ -37094,7 +37098,7 @@ class Game {
         //
         // Preload all the textures
         this.loader = new _pixiJs.Loader();
-        this.loader.add('backgroundImage', _backgroundPngDefault.default).add('cassidyImage', _cassidyPngDefault.default).add('zenyattaImage', _zenyattaPngDefault.default);
+        this.loader.add('backgroundImage', _backgroundPngDefault.default).add('cassidyImage', _cassidyPngDefault.default).add('zenyattaImage', _zenyattaPngDefault.default).add('bulletImage', _bulletJpgDefault.default);
         this.loader.load(()=>this.loadCompleted()
         );
     }
@@ -37103,7 +37107,7 @@ class Game {
         let background = new _pixiJs.Sprite(this.loader.resources["backgroundImage"].texture);
         background.scale.set(window.innerWidth / background.getBounds().width, window.innerHeight / background.getBounds().height);
         this.pixi.stage.addChild(background);
-        this.cassidy = new _cassidy.Cassidy(this.loader.resources["cassidyImage"].texture);
+        this.cassidy = new _cassidy.Cassidy(this.loader.resources["cassidyImage"].texture, this);
         this.pixi.stage.addChild(this.cassidy);
         this.zenyatta = new _zenyatta.Zenyatta(this.loader.resources["zenyattaImage"].texture);
         this.pixi.stage.addChild(this.zenyatta);
@@ -37113,10 +37117,21 @@ class Game {
     update(delta) {
         this.cassidy.update(delta);
         this.zenyatta.update(delta);
+        for (let bullet of this.bullets)bullet.update();
+    }
+    spawnBullet(x) {
+        let b = new _bullet.Bullet(this.loader.resources["bulletImage"].texture, this, x);
+        this.bullets.push(b);
+        this.pixi.stage.addChild(b);
+    }
+    removeBullet(bullet) {
+        this.bullets = this.bullets.filter((b)=>b != bullet
+        );
+        bullet.destroy;
     }
 }
 
-},{"pixi.js":"dsYej","./images/cassidy.png":"5A1ee","./images/background.png":"aHAnT","./images/zenyatta.png":"2JSGJ","./cassidy":"2aFYG","./zenyatta":"hHKQM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5A1ee":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/cassidy.png":"5A1ee","./images/background.png":"aHAnT","./images/zenyatta.png":"2JSGJ","./cassidy":"2aFYG","./zenyatta":"hHKQM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./bullet":"bzwxK","./images/bullet.jpg":"60NHX"}],"5A1ee":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "cassidy.c60fd0ae.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -37167,8 +37182,9 @@ parcelHelpers.export(exports, "Cassidy", ()=>Cassidy
 var _pixiJs = require("pixi.js");
 class Cassidy extends _pixiJs.Sprite {
     xspeed = 0;
-    constructor(texture){
+    constructor(texture, game){
         super(texture);
+        this.game = game;
         this.scale.set(-1, 1);
         this.x = 300;
         this.y = 500;
@@ -37183,8 +37199,14 @@ class Cassidy extends _pixiJs.Sprite {
         this.x += this.xspeed * delta;
         if (this.x <= 150) this.x = 150;
     }
+    shoot() {
+        this.game.spawnBullet(this.x + 150);
+    }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
+            case "F":
+                this.shoot();
+                break;
             case "A":
                 this.xspeed = -7;
                 break;
@@ -37195,6 +37217,8 @@ class Cassidy extends _pixiJs.Sprite {
     }
     onKeyUp(e) {
         switch(e.key.toUpperCase()){
+            case "F":
+                break;
             case "A":
             case "D":
                 this.xspeed = 0;
@@ -37246,7 +37270,31 @@ class Zenyatta extends _pixiJs.Sprite {
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hHDeU":[function(require,module,exports) {
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bzwxK":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Bullet", ()=>Bullet
+);
+var _pixiJs = require("pixi.js");
+class Bullet extends _pixiJs.Sprite {
+    constructor(texture, game, x){
+        super(texture);
+        this.game = game;
+        this.pivot.x = 30;
+        this.x = x + 20;
+    }
+    update() {
+        this.x += 3;
+    // if (this.x > 1400) {
+    //     this.game.removeBullet(this)
+    // }
+    }
+}
+
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"60NHX":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "bullet.355fd847.jpg" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"hHDeU":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Button", ()=>Button
