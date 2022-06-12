@@ -37112,6 +37112,7 @@ class Game {
     }
     update(delta) {
         this.cassidy.update(delta);
+        this.zenyatta.update(delta);
     }
 }
 
@@ -37180,16 +37181,14 @@ class Cassidy extends _pixiJs.Sprite {
     }
     update(delta) {
         this.x += this.xspeed * delta;
-        if (this.x <= 150) this.xspeed = 0;
+        if (this.x <= 150) this.x = 150;
     }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
             case "A":
-            case "ARROWLEFT":
                 this.xspeed = -7;
                 break;
             case "D":
-            case "ARROWRIGHT":
                 this.xspeed = 7;
                 break;
         }
@@ -37198,8 +37197,6 @@ class Cassidy extends _pixiJs.Sprite {
         switch(e.key.toUpperCase()){
             case "A":
             case "D":
-            case "ARROWLEFT":
-            case "ARROWRIGHT":
                 this.xspeed = 0;
                 break;
         }
@@ -37213,12 +37210,39 @@ parcelHelpers.export(exports, "Zenyatta", ()=>Zenyatta
 );
 var _pixiJs = require("pixi.js");
 class Zenyatta extends _pixiJs.Sprite {
+    xspeed = 0;
     constructor(texture){
         super(texture);
         this.x = 1200;
         this.y = 500;
         this.width = 150;
         this.height = 150;
+        window.addEventListener("keydown", (e)=>this.onKeyDown(e)
+        );
+        window.addEventListener("keyup", (e)=>this.onKeyUp(e)
+        );
+    }
+    update(delta) {
+        this.x += this.xspeed * delta;
+        if (this.x >= 1400) this.x = 1400;
+    }
+    onKeyDown(e) {
+        switch(e.key.toUpperCase()){
+            case "ARROWLEFT":
+                this.xspeed = -7;
+                break;
+            case "ARROWRIGHT":
+                this.xspeed = 7;
+                break;
+        }
+    }
+    onKeyUp(e) {
+        switch(e.key.toUpperCase()){
+            case "ARROWLEFT":
+            case "ARROWRIGHT":
+                this.xspeed = 0;
+                break;
+        }
     }
 }
 

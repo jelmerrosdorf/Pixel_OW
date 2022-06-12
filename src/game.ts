@@ -51,5 +51,6 @@ export class Game {
 
     update(delta: number) {
         this.cassidy.update(delta)
+        this.zenyatta.update(delta)
     }
 }

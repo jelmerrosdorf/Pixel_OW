@@ -4,7 +4,7 @@ export class Cassidy extends PIXI.Sprite {
 
     xspeed: number = 0
 
-    constructor(texture: PIXI.Texture){
+    constructor(texture: PIXI.Texture) {
         super(texture)
 
         this.scale.set(-1, 1)
@@ -20,19 +20,17 @@ export class Cassidy extends PIXI.Sprite {
     update(delta: number) {
         this.x += this.xspeed * delta
 
-        if(this.x <= 150) {
-            this.xspeed = 0
-        }
+        if (this.x <= 150) {
+            this.x = 150
+        } 
     }
 
     onKeyDown(e: KeyboardEvent): void {
         switch (e.key.toUpperCase()) {
             case "A":
-            case "ARROWLEFT":
                 this.xspeed = -7
                 break
             case "D":
-            case "ARROWRIGHT":
                 this.xspeed = 7
                 break
         }
@@ -42,8 +40,6 @@ export class Cassidy extends PIXI.Sprite {
         switch (e.key.toUpperCase()) {
             case "A":
             case "D":
-            case "ARROWLEFT":
-            case "ARROWRIGHT":
                 this.xspeed = 0
                 break
         }
