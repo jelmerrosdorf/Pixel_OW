@@ -29,7 +29,7 @@ export class Cassidy extends PIXI.Sprite {
     }
 
     private shoot() {
-        this.game.spawnBullet(this.x + 150)
+        this.game.spawnBullet(this.x + 80, this.y + 35)
     }
 
     private onKeyDown(e: KeyboardEvent): void {

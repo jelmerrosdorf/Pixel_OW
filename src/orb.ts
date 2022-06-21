@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js'
 import { Game } from './game'
 
-export class Bullet extends PIXI.Sprite {
+export class Orb extends PIXI.Sprite {
     private game:Game
 
     constructor(texture: PIXI.Texture, game: Game, x: number, y: number) {
@@ -15,9 +15,9 @@ export class Bullet extends PIXI.Sprite {
     }
 
     public update() {
-        this.x += 3
-        if (this.x > 1450) {
-            this.game.removeBullet(this)
+        this.x -= 3
+        if (this.x <= 50) {
+            this.game.removeOrb(this)
         }
     }
 }

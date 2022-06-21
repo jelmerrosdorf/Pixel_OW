@@ -4,7 +4,7 @@ import { Button } from './button';
 
 export class Startmenu {
 
-    private pixi: PIXI.Application
+    public pixi: PIXI.Application
     private button: Button
 
 
@@ -16,8 +16,7 @@ export class Startmenu {
         //
         this.pixi = new PIXI.Application({
             width: window.innerWidth,
-            height: window.innerHeight,
-            forceCanvas: true
+            height: window.innerHeight
         })
 
         document.body.appendChild(this.pixi.view)

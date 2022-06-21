@@ -1,11 +1,14 @@
 import * as PIXI from 'pixi.js'
+import { Game } from './game'
 
 export class Zenyatta extends PIXI.Sprite {
 
     private xspeed: number = 0
+    private game: Game
 
-    constructor(texture: PIXI.Texture){
+    constructor(texture: PIXI.Texture, game: Game){
         super(texture)
+        this.game = game
 
         this.x = 1200;
         this.y = 500;
@@ -24,8 +27,15 @@ export class Zenyatta extends PIXI.Sprite {
         }
     }
 
+    private shoot() {
+        this.game.spawnOrb(this.x + 80, this.y + 35)
+    }
+
     private onKeyDown(e: KeyboardEvent): void {
         switch (e.key.toUpperCase()) {
+            case "K":
+                this.shoot()
+                break
             case "ARROWLEFT":
                 this.xspeed = -7
                 break
@@ -37,6 +47,8 @@ export class Zenyatta extends PIXI.Sprite {
 
     private onKeyUp(e: KeyboardEvent): void {
         switch (e.key.toUpperCase()) {
+            case "K":
+                break
             case "ARROWLEFT":
             case "ARROWRIGHT":
                 this.xspeed = 0

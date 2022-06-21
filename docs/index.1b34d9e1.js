@@ -541,8 +541,7 @@ class Startmenu {
         //
         this.pixi = new _pixiJs.Application({
             width: window.innerWidth,
-            height: window.innerHeight,
-            forceCanvas: true
+            height: window.innerHeight
         });
         document.body.appendChild(this.pixi.view);
         this.button = new _button.Button(this.pixi.screen.width / 2, this.pixi.screen.height / 2);
@@ -37084,20 +37083,25 @@ var _zenyattaPng = require("./images/zenyatta.png");
 var _zenyattaPngDefault = parcelHelpers.interopDefault(_zenyattaPng);
 var _bulletPng = require("./images/bullet.png");
 var _bulletPngDefault = parcelHelpers.interopDefault(_bulletPng);
+var _orbPng = require("./images/orb.png");
+var _orbPngDefault = parcelHelpers.interopDefault(_orbPng);
 var _cassidy = require("./cassidy");
 var _zenyatta = require("./zenyatta");
 var _bullet = require("./bullet");
+var _orb = require("./orb");
 class Game {
     backgroundTextures = [];
     bullets = [];
+    orbs = [];
     constructor(pixi){
+        console.log("ik ben een game");
         this.pixi = pixi;
         //
         // STAP 1 is verhuisd naar startmenu.ts
         //
         // Preload all the textures
         this.loader = new _pixiJs.Loader();
-        this.loader.add('spritesheet', "spritesheet.json").add('cassidyImage', _cassidyPngDefault.default).add('zenyattaImage', _zenyattaPngDefault.default).add('bulletImage', _bulletPngDefault.default);
+        this.loader.add('spritesheet', "spritesheet.json").add('cassidyImage', _cassidyPngDefault.default).add('zenyattaImage', _zenyattaPngDefault.default).add('bulletImage', _bulletPngDefault.default).add('orbImage', _orbPngDefault.default);
         this.loader.load(()=>this.loadCompleted()
         );
     }
@@ -37114,7 +37118,7 @@ class Game {
         background.play();
         this.cassidy = new _cassidy.Cassidy(this.loader.resources["cassidyImage"].texture, this);
         this.pixi.stage.addChild(this.cassidy);
-        this.zenyatta = new _zenyatta.Zenyatta(this.loader.resources["zenyattaImage"].texture);
+        this.zenyatta = new _zenyatta.Zenyatta(this.loader.resources["zenyattaImage"].texture, this);
         this.pixi.stage.addChild(this.zenyatta);
         this.pixi.ticker.add((delta)=>this.update(delta)
         );
@@ -37123,20 +37127,31 @@ class Game {
         this.cassidy.update(delta);
         this.zenyatta.update(delta);
         for (let bullet of this.bullets)bullet.update();
+        for (let orb of this.orbs)orb.update();
     }
-    spawnBullet(x) {
-        let b = new _bullet.Bullet(this.loader.resources["bulletImage"].texture, this, x);
+    spawnBullet(x, y) {
+        let b = new _bullet.Bullet(this.loader.resources["bulletImage"].texture, this, x, y);
         this.bullets.push(b);
         this.pixi.stage.addChild(b);
+    }
+    spawnOrb(x, y) {
+        let o = new _orb.Orb(this.loader.resources["orbImage"].texture, this, x, y);
+        this.orbs.push(o);
+        this.pixi.stage.addChild(o);
     }
     removeBullet(bullet) {
         this.bullets = this.bullets.filter((b)=>b != bullet
         );
         bullet.destroy();
     }
+    removeOrb(orb) {
+        this.orbs = this.orbs.filter((o)=>o != orb
+        );
+        orb.destroy();
+    }
 }
 
-},{"pixi.js":"dsYej","./images/cassidy.png":"5A1ee","./images/zenyatta.png":"2JSGJ","./cassidy":"2aFYG","./zenyatta":"hHKQM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./bullet":"bzwxK","./images/bullet.png":"3lWn3"}],"5A1ee":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/cassidy.png":"5A1ee","./images/zenyatta.png":"2JSGJ","./images/bullet.png":"3lWn3","./images/orb.png":"34tXX","./cassidy":"2aFYG","./zenyatta":"hHKQM","./bullet":"bzwxK","./orb":"7UUTh","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5A1ee":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "cassidy.c60fd0ae.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -37176,6 +37191,12 @@ exports.getOrigin = getOrigin;
 },{}],"2JSGJ":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "zenyatta.b88b58cb.png" + "?" + Date.now();
 
+},{"./helpers/bundle-url":"lgJ39"}],"3lWn3":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "bullet.3dbbe9b9.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"34tXX":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "orb.d6f45495.png" + "?" + Date.now();
+
 },{"./helpers/bundle-url":"lgJ39"}],"2aFYG":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -37202,7 +37223,7 @@ class Cassidy extends _pixiJs.Sprite {
         if (this.x <= 150) this.x = 150;
     }
     shoot() {
-        this.game.spawnBullet(this.x + 150);
+        this.game.spawnBullet(this.x + 80, this.y + 35);
     }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
@@ -37237,8 +37258,9 @@ parcelHelpers.export(exports, "Zenyatta", ()=>Zenyatta
 var _pixiJs = require("pixi.js");
 class Zenyatta extends _pixiJs.Sprite {
     xspeed = 0;
-    constructor(texture){
+    constructor(texture, game){
         super(texture);
+        this.game = game;
         this.x = 1200;
         this.y = 500;
         this.width = 150;
@@ -37252,8 +37274,14 @@ class Zenyatta extends _pixiJs.Sprite {
         this.x += this.xspeed * delta;
         if (this.x >= 1400) this.x = 1400;
     }
+    shoot() {
+        this.game.spawnOrb(this.x + 80, this.y + 35);
+    }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
+            case "K":
+                this.shoot();
+                break;
             case "ARROWLEFT":
                 this.xspeed = -7;
                 break;
@@ -37264,6 +37292,8 @@ class Zenyatta extends _pixiJs.Sprite {
     }
     onKeyUp(e) {
         switch(e.key.toUpperCase()){
+            case "K":
+                break;
             case "ARROWLEFT":
             case "ARROWRIGHT":
                 this.xspeed = 0;
@@ -37279,22 +37309,42 @@ parcelHelpers.export(exports, "Bullet", ()=>Bullet
 );
 var _pixiJs = require("pixi.js");
 class Bullet extends _pixiJs.Sprite {
-    constructor(texture, game, x){
+    constructor(texture, game, x, y){
         super(texture);
         this.game = game;
         this.pivot.x = 30;
-        this.x = x + 20;
+        this.pivot.y = 30;
+        this.x = x - 50;
+        this.y = y + 50;
     }
     update() {
         this.x += 3;
-        if (this.x > 1400) this.game.removeBullet(this);
+        if (this.x > 1450) this.game.removeBullet(this);
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3lWn3":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "bullet.3dbbe9b9.png" + "?" + Date.now();
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7UUTh":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Orb", ()=>Orb
+);
+var _pixiJs = require("pixi.js");
+class Orb extends _pixiJs.Sprite {
+    constructor(texture, game, x, y){
+        super(texture);
+        this.game = game;
+        this.pivot.x = 30;
+        this.pivot.y = 30;
+        this.x = x - 50;
+        this.y = y + 50;
+    }
+    update() {
+        this.x -= 3;
+        if (this.x <= 50) this.game.removeOrb(this);
+    }
+}
 
-},{"./helpers/bundle-url":"lgJ39"}],"hHDeU":[function(require,module,exports) {
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hHDeU":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Button", ()=>Button
