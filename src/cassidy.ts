@@ -7,7 +7,10 @@ export class Cassidy extends PIXI.Sprite {
     private yspeed: number = 0
 
     private counter: number = 0
-    private cooldown: number = 120
+    private counter2: number = 0
+    private cooldown: number = 60
+    private cooldownShoot: boolean = true
+    private cooldownJump: boolean = true
 
     private game: Game
 
@@ -47,24 +50,41 @@ export class Cassidy extends PIXI.Sprite {
         }
 
         this.counter += delta
+        this.counter2 += delta
+
+        if (this.counter > this.cooldown + 30) {
+            this.counter = 0
+            this.cooldownJump = true
+        }
+
+        if (this.counter2 > this.cooldown + 60) {
+            this.counter2 = 0
+            this.cooldownShoot = true
+        }
 
     }
 
     private jump() {
-        this.yspeed = -10
+        if (this.cooldownJump == true) {
+            this.yspeed = -10
+        }
     }
 
     private shoot() {
-        this.game.spawnBullet(this.x + 50, this.y + 35)
+        if (this.cooldownShoot == true) {
+            this.game.spawnBullet(this.x + 50, this.y + 35)
+        }
     }
 
     private onKeyDown(e: KeyboardEvent): void {
         switch (e.key.toUpperCase()) {
             case "S":
                 this.shoot()
+                this.cooldownShoot = false
                 break
             case "W":
                 this.jump()
+                this.cooldownJump = false
                 break
             case "A":
                 this.xspeed = -7

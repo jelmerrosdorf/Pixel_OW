@@ -37221,7 +37221,10 @@ class Cassidy extends _pixiJs.Sprite {
     xspeed = 0;
     yspeed = 0;
     counter = 0;
-    cooldown = 120;
+    counter2 = 0;
+    cooldown = 60;
+    cooldownShoot = true;
+    cooldownJump = true;
     constructor(texture, game){
         super(texture);
         this.game = game;
@@ -37243,20 +37246,31 @@ class Cassidy extends _pixiJs.Sprite {
         if (this.y >= 501) this.y = 500;
         if (this.y <= 74) this.y = 75;
         this.counter += delta;
+        this.counter2 += delta;
+        if (this.counter > this.cooldown + 30) {
+            this.counter = 0;
+            this.cooldownJump = true;
+        }
+        if (this.counter2 > this.cooldown + 60) {
+            this.counter2 = 0;
+            this.cooldownShoot = true;
+        }
     }
     jump() {
-        this.yspeed = -10;
+        if (this.cooldownJump == true) this.yspeed = -10;
     }
     shoot() {
-        this.game.spawnBullet(this.x + 50, this.y + 35);
+        if (this.cooldownShoot == true) this.game.spawnBullet(this.x + 50, this.y + 35);
     }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
             case "S":
                 this.shoot();
+                this.cooldownShoot = false;
                 break;
             case "W":
                 this.jump();
+                this.cooldownJump = false;
                 break;
             case "A":
                 this.xspeed = -7;
@@ -37290,6 +37304,11 @@ var _pixiJs = require("pixi.js");
 class Zenyatta extends _pixiJs.Sprite {
     xspeed = 0;
     yspeed = 0;
+    counter = 0;
+    counter2 = 0;
+    cooldown = 60;
+    cooldownShoot = true;
+    cooldownJump = true;
     constructor(texture, game){
         super(texture);
         this.game = game;
@@ -37309,20 +37328,32 @@ class Zenyatta extends _pixiJs.Sprite {
         this.y += this.yspeed * delta;
         if (this.y >= 501) this.y = 500;
         if (this.y <= 74) this.y = 75;
+        this.counter += delta;
+        this.counter2 += delta;
+        if (this.counter > this.cooldown + 30) {
+            this.counter = 0;
+            this.cooldownJump = true;
+        }
+        if (this.counter2 > this.cooldown + 60) {
+            this.counter2 = 0;
+            this.cooldownShoot = true;
+        }
     }
     jump() {
-        this.yspeed = -10;
+        if (this.cooldownJump == true) this.yspeed = -10;
     }
     shoot() {
-        this.game.spawnOrb(this.x + 80, this.y + 35);
+        if (this.cooldownShoot == true) this.game.spawnOrb(this.x + 50, this.y + 35);
     }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
             case "ARROWDOWN":
                 this.shoot();
+                this.cooldownShoot = false;
                 break;
             case "ARROWUP":
                 this.jump();
+                this.cooldownJump = false;
                 break;
             case "ARROWLEFT":
                 this.xspeed = -7;
