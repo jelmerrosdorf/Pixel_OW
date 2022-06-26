@@ -37094,7 +37094,6 @@ class Game {
     bullets = [];
     orbs = [];
     constructor(pixi){
-        console.log("ik ben een game");
         this.pixi = pixi;
         //
         // STAP 1 is verhuisd naar startmenu.ts
@@ -37220,6 +37219,7 @@ parcelHelpers.export(exports, "Cassidy", ()=>Cassidy
 var _pixiJs = require("pixi.js");
 class Cassidy extends _pixiJs.Sprite {
     xspeed = 0;
+    yspeed = 0;
     constructor(texture, game){
         super(texture);
         this.game = game;
@@ -37236,14 +37236,23 @@ class Cassidy extends _pixiJs.Sprite {
     update(delta) {
         this.x += this.xspeed * delta;
         if (this.x <= 150) this.x = 150;
+        this.y += this.yspeed * delta;
+        if (this.y >= 501) this.y = 500;
+        if (this.y <= 74) this.y = 75;
+    }
+    jump() {
+        this.yspeed = -10;
     }
     shoot() {
         this.game.spawnBullet(this.x + 80, this.y + 35);
     }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
-            case "F":
+            case "S":
                 this.shoot();
+                break;
+            case "W":
+                this.jump();
                 break;
             case "A":
                 this.xspeed = -7;
@@ -37255,7 +37264,10 @@ class Cassidy extends _pixiJs.Sprite {
     }
     onKeyUp(e) {
         switch(e.key.toUpperCase()){
-            case "F":
+            case "S":
+                break;
+            case "W":
+                this.yspeed = 10;
                 break;
             case "A":
             case "D":
@@ -37273,6 +37285,7 @@ parcelHelpers.export(exports, "Zenyatta", ()=>Zenyatta
 var _pixiJs = require("pixi.js");
 class Zenyatta extends _pixiJs.Sprite {
     xspeed = 0;
+    yspeed = 0;
     constructor(texture, game){
         super(texture);
         this.game = game;
@@ -37288,14 +37301,23 @@ class Zenyatta extends _pixiJs.Sprite {
     update(delta) {
         this.x += this.xspeed * delta;
         if (this.x >= 1400) this.x = 1400;
+        this.y += this.yspeed * delta;
+        if (this.y >= 501) this.y = 500;
+        if (this.y <= 74) this.y = 75;
+    }
+    jump() {
+        this.yspeed = -10;
     }
     shoot() {
         this.game.spawnOrb(this.x + 80, this.y + 35);
     }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
-            case "K":
+            case "ARROWDOWN":
                 this.shoot();
+                break;
+            case "ARROWUP":
+                this.jump();
                 break;
             case "ARROWLEFT":
                 this.xspeed = -7;
@@ -37307,7 +37329,10 @@ class Zenyatta extends _pixiJs.Sprite {
     }
     onKeyUp(e) {
         switch(e.key.toUpperCase()){
-            case "K":
+            case "ARROWDOWN":
+                break;
+            case "ARROWUP":
+                this.yspeed = 10;
                 break;
             case "ARROWLEFT":
             case "ARROWRIGHT":

@@ -21,8 +21,6 @@ export class Game {
     private orbs: Orb[] = []
 
     constructor(pixi: PIXI.Application) {
-        console.log("ik ben een game")
-
         this.pixi = pixi
 
         //
@@ -52,6 +50,7 @@ export class Game {
             window.innerWidth / background.getBounds().width,
             window.innerHeight / background.getBounds().height
         )
+
         this.pixi.stage.addChild(background)
         background.animationSpeed = 0.15
         background.play()

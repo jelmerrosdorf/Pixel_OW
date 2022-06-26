@@ -4,6 +4,7 @@ import { Game } from './game'
 export class Zenyatta extends PIXI.Sprite {
 
     private xspeed: number = 0
+    private yspeed: number = 0
     private game: Game
 
     constructor(texture: PIXI.Texture, game: Game){
@@ -25,6 +26,20 @@ export class Zenyatta extends PIXI.Sprite {
         if(this.x >= 1400) {
             this.x = 1400
         }
+
+        this.y += this.yspeed * delta
+
+        if (this.y >= 501) {
+            this.y = 500
+        }
+
+        if (this.y <= 74) {
+            this.y = 75
+        }
+    }
+
+    private jump() {
+        this.yspeed = -10
     }
 
     private shoot() {
@@ -33,9 +48,12 @@ export class Zenyatta extends PIXI.Sprite {
 
     private onKeyDown(e: KeyboardEvent): void {
         switch (e.key.toUpperCase()) {
-            case "K":
+            case "ARROWDOWN":
                 this.shoot()
                 break
+            case "ARROWUP":
+                this.jump()
+                break    
             case "ARROWLEFT":
                 this.xspeed = -7
                 break
@@ -47,8 +65,11 @@ export class Zenyatta extends PIXI.Sprite {
 
     private onKeyUp(e: KeyboardEvent): void {
         switch (e.key.toUpperCase()) {
-            case "K":
+            case "ARROWDOWN":
                 break
+            case "ARROWUP":
+                this.yspeed = 10
+                break    
             case "ARROWLEFT":
             case "ARROWRIGHT":
                 this.xspeed = 0
