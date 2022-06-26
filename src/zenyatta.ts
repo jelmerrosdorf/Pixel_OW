@@ -23,7 +23,11 @@ export class Zenyatta extends PIXI.Sprite {
     public update(delta: number) {
         this.x += this.xspeed * delta
 
-        if(this.x >= 1400) {
+        if (this.x <= 50) {
+            this.x = 50
+        }
+        
+        if (this.x >= 1400) {
             this.x = 1400
         }
 

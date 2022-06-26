@@ -37236,6 +37236,7 @@ class Cassidy extends _pixiJs.Sprite {
     update(delta) {
         this.x += this.xspeed * delta;
         if (this.x <= 150) this.x = 150;
+        if (this.x >= 1500) this.x = 1500;
         this.y += this.yspeed * delta;
         if (this.y >= 501) this.y = 500;
         if (this.y <= 74) this.y = 75;
@@ -37300,6 +37301,7 @@ class Zenyatta extends _pixiJs.Sprite {
     }
     update(delta) {
         this.x += this.xspeed * delta;
+        if (this.x <= 50) this.x = 50;
         if (this.x >= 1400) this.x = 1400;
         this.y += this.yspeed * delta;
         if (this.y >= 501) this.y = 500;

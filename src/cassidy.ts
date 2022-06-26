@@ -28,6 +28,10 @@ export class Cassidy extends PIXI.Sprite {
             this.x = 150
         }
 
+        if (this.x >= 1500) {
+            this.x = 1500
+        }
+
         this.y += this.yspeed * delta
 
         if (this.y >= 501) {
