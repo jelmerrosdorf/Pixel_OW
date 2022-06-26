@@ -37128,6 +37128,7 @@ class Game {
         this.zenyatta.update(delta);
         for (let bullet of this.bullets)bullet.update();
         for (let orb of this.orbs)orb.update();
+        this.checkCollisions();
     }
     spawnBullet(x, y) {
         let b = new _bullet.Bullet(this.loader.resources["bulletImage"].texture, this, x, y);
@@ -37148,6 +37149,20 @@ class Game {
         this.orbs = this.orbs.filter((o)=>o != orb
         );
         orb.destroy();
+    }
+    checkCollisions() {
+        for (let bullet of this.bullets)if (this.collisionBullet(bullet, this.zenyatta)) this.removeBullet(bullet);
+        for (let orb of this.orbs)if (this.collisionOrb(orb, this.cassidy)) this.removeOrb(orb);
+    }
+    collisionBullet(bullet, zenyatta) {
+        const bounds1 = bullet.getBounds();
+        const bounds2 = zenyatta.getBounds();
+        return bounds1.x < bounds2.x + bounds2.width && bounds1.x + bounds1.width > bounds2.x && bounds1.y < bounds2.y + bounds2.height && bounds1.y + bounds1.height > bounds2.y;
+    }
+    collisionOrb(orb, cassidy) {
+        const bounds1 = orb.getBounds();
+        const bounds2 = cassidy.getBounds();
+        return bounds1.x < bounds2.x + bounds2.width && bounds1.x + bounds1.width > bounds2.x && bounds1.y < bounds2.y + bounds2.height && bounds1.y + bounds1.height > bounds2.y;
     }
 }
 

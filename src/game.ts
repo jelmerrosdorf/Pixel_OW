@@ -76,6 +76,8 @@ export class Game {
         for (let orb of this.orbs) {
             orb.update()
         }
+
+        this.checkCollisions()
     }
 
     public spawnBullet(x: number, y: number) {
@@ -99,4 +101,39 @@ export class Game {
         this.orbs = this.orbs.filter((o: Orb) => o != orb)
         orb.destroy()
     }
-}   
+
+    private checkCollisions() {
+        for (let bullet of this.bullets) {
+            if(this.collisionBullet(bullet, this.zenyatta)) {
+                this.removeBullet(bullet)
+            }
+        }
+
+        for (let orb of this.orbs) {
+            if(this.collisionOrb(orb, this.cassidy)) {
+                this.removeOrb(orb)
+            }
+        }
+    }
+
+    private collisionBullet(bullet: Bullet, zenyatta: Zenyatta) {
+        const bounds1 = bullet.getBounds()
+        const bounds2 = zenyatta.getBounds()
+    
+        return bounds1.x < bounds2.x + bounds2.width
+        && bounds1.x + bounds1.width > bounds2.x
+        && bounds1.y < bounds2.y + bounds2.height
+        && bounds1.y + bounds1.height > bounds2.y;
+    }
+
+    private collisionOrb(orb: Orb, cassidy: Cassidy) {
+        const bounds1 = orb.getBounds()
+        const bounds2 = cassidy.getBounds()
+
+        return bounds1.x < bounds2.x + bounds2.width
+        && bounds1.x + bounds1.width > bounds2.x
+        && bounds1.y < bounds2.y + bounds2.height
+        && bounds1.y + bounds1.height > bounds2.y;
+    }
+} 
+
