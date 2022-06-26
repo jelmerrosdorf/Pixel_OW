@@ -37128,6 +37128,8 @@ class Game {
         for (let bullet of this.bullets)bullet.update();
         for (let orb of this.orbs)orb.update();
         this.checkCollisions();
+        console.log(this.zenyatta.health);
+        console.log(this.cassidy.health);
     }
     spawnBullet(x, y) {
         let b = new _bullet.Bullet(this.loader.resources["bulletImage"].texture, this, x, y);
@@ -37150,8 +37152,14 @@ class Game {
         orb.destroy();
     }
     checkCollisions() {
-        for (let bullet of this.bullets)if (this.collisionBullet(bullet, this.zenyatta)) this.removeBullet(bullet);
-        for (let orb of this.orbs)if (this.collisionOrb(orb, this.cassidy)) this.removeOrb(orb);
+        for (let bullet of this.bullets)if (this.collisionBullet(bullet, this.zenyatta)) {
+            this.removeBullet(bullet);
+            this.zenyatta.health -= 25;
+        }
+        for (let orb of this.orbs)if (this.collisionOrb(orb, this.cassidy)) {
+            this.removeOrb(orb);
+            this.cassidy.health -= 25;
+        }
     }
     collisionBullet(bullet, zenyatta) {
         const bounds1 = bullet.getBounds();
@@ -37218,6 +37226,7 @@ parcelHelpers.export(exports, "Cassidy", ()=>Cassidy
 );
 var _pixiJs = require("pixi.js");
 class Cassidy extends _pixiJs.Sprite {
+    health = 250;
     xspeed = 0;
     yspeed = 0;
     counter = 0;
@@ -37302,6 +37311,7 @@ parcelHelpers.export(exports, "Zenyatta", ()=>Zenyatta
 );
 var _pixiJs = require("pixi.js");
 class Zenyatta extends _pixiJs.Sprite {
+    health = 250;
     xspeed = 0;
     yspeed = 0;
     counter = 0;

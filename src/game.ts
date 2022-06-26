@@ -77,6 +77,9 @@ export class Game {
         }
 
         this.checkCollisions()
+
+        console.log(this.zenyatta.health)
+        console.log(this.cassidy.health)
     }
 
     public spawnBullet(x: number, y: number) {
@@ -105,12 +108,14 @@ export class Game {
         for (let bullet of this.bullets) {
             if(this.collisionBullet(bullet, this.zenyatta)) {
                 this.removeBullet(bullet)
+                this.zenyatta.health -= 25
             }
         }
 
         for (let orb of this.orbs) {
             if(this.collisionOrb(orb, this.cassidy)) {
                 this.removeOrb(orb)
+                this.cassidy.health -= 25
             }
         }
     }

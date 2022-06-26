@@ -3,6 +3,8 @@ import { Game } from './game'
 
 export class Zenyatta extends PIXI.Sprite {
 
+    public health: number = 250
+
     private xspeed: number = 0
     private yspeed: number = 0
 
