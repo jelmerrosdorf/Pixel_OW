@@ -37220,6 +37220,8 @@ var _pixiJs = require("pixi.js");
 class Cassidy extends _pixiJs.Sprite {
     xspeed = 0;
     yspeed = 0;
+    counter = 0;
+    cooldown = 120;
     constructor(texture, game){
         super(texture);
         this.game = game;
@@ -37236,16 +37238,17 @@ class Cassidy extends _pixiJs.Sprite {
     update(delta) {
         this.x += this.xspeed * delta;
         if (this.x <= 150) this.x = 150;
-        if (this.x >= 1500) this.x = 1500;
+        if (this.x >= 725) this.x = 725;
         this.y += this.yspeed * delta;
         if (this.y >= 501) this.y = 500;
         if (this.y <= 74) this.y = 75;
+        this.counter += delta;
     }
     jump() {
         this.yspeed = -10;
     }
     shoot() {
-        this.game.spawnBullet(this.x + 80, this.y + 35);
+        this.game.spawnBullet(this.x + 50, this.y + 35);
     }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
@@ -37301,7 +37304,7 @@ class Zenyatta extends _pixiJs.Sprite {
     }
     update(delta) {
         this.x += this.xspeed * delta;
-        if (this.x <= 50) this.x = 50;
+        if (this.x <= 825) this.x = 825;
         if (this.x >= 1400) this.x = 1400;
         this.y += this.yspeed * delta;
         if (this.y >= 501) this.y = 500;

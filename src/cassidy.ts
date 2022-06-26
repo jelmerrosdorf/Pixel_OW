@@ -4,13 +4,17 @@ import { Game } from './game'
 export class Cassidy extends PIXI.Sprite {
 
     private xspeed: number = 0
-    private yspeed: number = 0 
+    private yspeed: number = 0
+
+    private counter: number = 0
+    private cooldown: number = 120
+
     private game: Game
 
     constructor(texture: PIXI.Texture, game: Game) {
         super(texture)
         this.game = game
-        
+
         this.scale.set(-1, 1)
         this.x = 300;
         this.y = 500;
@@ -28,19 +32,22 @@ export class Cassidy extends PIXI.Sprite {
             this.x = 150
         }
 
-        if (this.x >= 1500) {
-            this.x = 1500
+        if (this.x >= 725) {
+            this.x = 725
         }
 
         this.y += this.yspeed * delta
 
         if (this.y >= 501) {
             this.y = 500
-        } 
-        
+        }
+
         if (this.y <= 74) {
             this.y = 75
         }
+
+        this.counter += delta
+
     }
 
     private jump() {
@@ -48,7 +55,7 @@ export class Cassidy extends PIXI.Sprite {
     }
 
     private shoot() {
-        this.game.spawnBullet(this.x + 80, this.y + 35)
+        this.game.spawnBullet(this.x + 50, this.y + 35)
     }
 
     private onKeyDown(e: KeyboardEvent): void {
@@ -72,9 +79,9 @@ export class Cassidy extends PIXI.Sprite {
         switch (e.key.toUpperCase()) {
             case "S":
                 break
-            case "W": 
+            case "W":
                 this.yspeed = 10
-                break  
+                break
             case "A":
             case "D":
                 this.xspeed = 0
